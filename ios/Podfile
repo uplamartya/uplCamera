@@ -1,6 +1,6 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
-
+permissions_path = '../node_modules/react-native-permissions/ios'
 platform :ios, '11.0'
 install! 'cocoapods', :deterministic_uuids => false
 
@@ -20,6 +20,9 @@ target 'uplCamera' do
   )
 
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+  pod 'Permission-Camera', :path => "../node_modules/react-native-permissions/ios/Camera"
+  pod 'Permission-PhotoLibrary', :path => "../node_modules/react-native-permissions/ios/PhotoLibrary"
+  
 
   target 'uplCameraTests' do
     inherit! :complete
