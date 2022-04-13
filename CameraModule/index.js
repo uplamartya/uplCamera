@@ -13,6 +13,7 @@ import {
   PanResponder,
   ActivityIndicator,
   BackHandler,
+  LogBox
 } from 'react-native';
 import {
   PERMISSIONS,
@@ -55,6 +56,8 @@ function calcDistance(x1, y1, x2, y2) {
   return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 }
 export default class CameraScreen extends React.Component {
+  
+  
   currentZoomValue = 0;
   imagePickerOpen = false;
   imagesPerPage = 50;
@@ -67,6 +70,8 @@ export default class CameraScreen extends React.Component {
   }
 
   componentDidMount() {
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+  LogBox.ignoreAllLogs();//Ignore all log notifications
     this.getDevicePhotos();
     BackHandler.addEventListener(
       'hardwareBackPress',
@@ -798,6 +803,7 @@ export default class CameraScreen extends React.Component {
   }
 
   onHandleSubmit(data) {
+    this.props.onSubmit(data);
     this.setState({imagesArray: []});
     this.hideGallary();
     this.setState({imagesArray: []});
