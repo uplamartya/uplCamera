@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {forwardRef, useImperativeHandle} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,11 +14,13 @@ import {
   ActivityIndicator,
   BackHandler,
   LogBox,
+  Modal,
 } from 'react-native';
 import {
   PERMISSIONS,
   checkMultiple,
   requestMultiple,
+  openSettings,
 } from 'react-native-permissions';
 // import Color from '../../Constants/Colors';
 import {FlatGrid} from 'react-native-super-grid';
@@ -65,6 +67,22 @@ export default class CameraScreen extends React.Component {
   constructor(props) {
     super(props);
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+  }
+  // TO open device settings from custom modal or Parent Component
+  handleParentSettingsButton() {
+    this.openDeviceSettings();
+  }
+  // To open device permission settings
+  openDeviceSettings() {
+    openSettings().catch(() => console.warn('cannot open settings'));
+  }
+  // To Close permission dialog or modal
+  handleParentCloseButton() {
+    this.closeSettingsModal();
+  }
+  // To Close permission dialog or modal
+  closeSettingsModal() {
+    this.setState({showModal: false});
   }
 
   componentDidMount() {
@@ -557,7 +575,7 @@ export default class CameraScreen extends React.Component {
   tabSingleItem = item => {
     if (this.state.imagesArray.length > 0) {
       this.selectItems(item);
-    }else{
+    } else {
       this.onHandleSubmit(item);
     }
   };
@@ -1124,24 +1142,71 @@ export default class CameraScreen extends React.Component {
     return (
       <>
         <View style={styles.container}>{this.renderCamera()}</View>
-        {/* <DeleteModal
-        permissionPrompt={true}
-          showModal={this.state.showModal}
-          onPressclose={() => {
-            this.setState({ showModal: false });
-            this.props.navigation.goBack();
-          }}
-          heading={'No Permission'}
-          context={'You have to grant permission from settings to access camera and gallery feature'}
-          buttonText="Open Settings"
-          deleteImage={require('../assets/images/infoviewDetails.png')}
-          onPress={() => {
-            // removeImage(currentImageIndex);
-            openSettings().catch(() => console.warn('cannot open settings'));
-            this.setState({showModal:false})
-            this.props.navigation.goBack();
-          }}
-        /> */}
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.showModal}
+          onRequestClose={() => {
+            this.setState({showModal: false});
+          }}>
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <View
+              style={{
+                width: '80%',
+                height: 150,
+                backgroundColor: 'white',
+                borderRadius: 10,
+                paddingHorizontal: 10,
+                paddingVertical: 10,
+              }}>
+              <View style={{flex: 1}}>
+                {this.props.deleteModal ? (
+                  this.props.deleteModal()
+                ) : (
+                  <>
+                    <Text style={{fontSize: 22, color: 'black'}}>
+                      No Permission
+                    </Text>
+                    <Text>You need to grand the permission from settings</Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        position: 'absolute',
+                        bottom: 0,
+                        // height:100
+                      }}>
+                      <TouchableOpacity
+                        style={{
+                          backgroundColor: 'red',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          flex: 1,
+                          padding: 10,
+                        }}>
+                        <Text style={{color: 'white'}}>Open Settings</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({showModal: false});
+                        }}
+                        style={{
+                          backgroundColor: '#dedede',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          flex: 1,
+                          padding: 10,
+                        }}>
+                        <Text>Cancel</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </>
+                )}
+              </View>
+            </View>
+          </View>
+        </Modal>
       </>
     );
   }
