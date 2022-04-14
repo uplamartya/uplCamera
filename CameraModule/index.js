@@ -1,4 +1,4 @@
-import React, {forwardRef, useImperativeHandle} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -22,11 +22,10 @@ import {
   requestMultiple,
   openSettings,
 } from 'react-native-permissions';
-// import Color from '../../Constants/Colors';
+import Modules from '../Modules';
 import {FlatGrid} from 'react-native-super-grid';
 import Header from '../Common/Components/Header';
 import {RNCamera} from 'react-native-camera';
-import CameraRoll from '@react-native-community/cameraroll';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 const PICKER_HIDE_POSITION =
@@ -64,9 +63,11 @@ export default class CameraScreen extends React.Component {
   isZooming = false;
   cameraToggleRef = new Animated.Value(0);
   SelectorAnimatedRef = new Animated.Value(windowHeight);
+  methodsMaster = null
   constructor(props) {
     super(props);
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    
   }
   // TO open device settings from custom modal or Parent Component
   handleParentSettingsButton() {
@@ -86,9 +87,18 @@ export default class CameraScreen extends React.Component {
   }
 
   componentDidMount() {
+    const {getDevicePhotos, getMorePhotos} = Modules();
     LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
     LogBox.ignoreAllLogs(); //Ignore all log notifications
-    this.getDevicePhotos();
+    this.methodsMaster = getMorePhotos; // Need to be improved 
+    getDevicePhotos(50)
+      .then(res => {
+        this.setState({galleryMedias: res});
+      })
+      .catch(errror => {
+        console.log(errror);
+      });
+
     BackHandler.addEventListener(
       'hardwareBackPress',
       this.handleBackButtonClick,
@@ -122,7 +132,15 @@ export default class CameraScreen extends React.Component {
               //   this.failMsg({description:'You need to grant the permissions'})
               // this.props.navigation.goBack();
             } else {
-              this.getDevicePhotos();
+              
+              getDevicePhotos(50)
+                .then(res => {
+                  this.setState({galleryMedias: res});
+                })
+                .catch(errror => {
+                  console.log(errror);
+                });
+              
               this.camera.refreshAuthorizationStatus();
             }
           });
@@ -157,7 +175,13 @@ export default class CameraScreen extends React.Component {
             ) {
               // this.props.navigation.goBack();
             } else {
-              this.getDevicePhotos();
+              getDevicePhotos(50)
+                .then(res => {
+                  this.setState({galleryMedias: res});
+                })
+                .catch(errror => {
+                  console.log(errror);
+                });
               this.camera.refreshAuthorizationStatus();
             }
           });
@@ -176,11 +200,10 @@ export default class CameraScreen extends React.Component {
     }
   }
 
-  //   componentDidUpdate(){
-  //     if(this.state.imagesArray.length > 29){
-  //       this.onHandleSubmit(this.state.imagesArray);
-  //     }
-  //   }
+  // componentDidUpdate() {
+    
+  //   console.log('first', this.state.galleryMedias);
+  // }
 
   componentWillUnmount() {
     BackHandler.removeEventListener(
@@ -312,48 +335,6 @@ export default class CameraScreen extends React.Component {
       // }
     },
   });
-
-  async getDevicePhotos() {
-    CameraRoll.getPhotos({
-      first: this.imagesPerPage,
-      assetType: 'All',
-    })
-      .then(r => {
-        this.setState({
-          galleryMedias: [
-            ...r.edges.filter(item => {
-              return item.node.image.uri.indexOf('null-') < 0 ? true : false;
-            }),
-          ],
-          pageInfo: r.page_info,
-        });
-      })
-      .catch(err => {
-        //Error Loading Images
-      });
-  }
-
-  async getMorePictures() {
-    CameraRoll.getPhotos({
-      first: this.imagesPerPage,
-      after: this.state.pageInfo.end_cursor,
-      assetType: 'All',
-    })
-      .then(r => {
-        this.setState({
-          galleryMedias: [
-            ...this.state.galleryMedias,
-            ...r.edges.filter(item => {
-              return item.node.image.uri.indexOf('null-') < 0 ? true : false;
-            }),
-          ],
-          pageInfo: r.page_info,
-        });
-      })
-      .catch(err => {
-        //Error Loading Images
-      });
-  }
 
   rotateCameraToggle() {
     if (this.state.isToggleRotate) {
@@ -991,7 +972,25 @@ export default class CameraScreen extends React.Component {
               key="{item}"
               renderItem={this.renderAlbum}
               onEndReached={() => {
-                this.getMorePictures();
+                
+                this.methodsMaster(50)
+                  .then(res => {
+                    this.setState({
+                      galleryMedias: [
+                        ...this.state.galleryMedias,
+                        ...res
+                      ],
+                    });
+                  })
+                  .catch(error => {
+                    console.log('Error', error);
+                  });
+                // this.setState({
+                //   galleryMedias: [
+                //     ...this.state.galleryMedias,
+                //     ...getMorePhotos(),
+                //   ],
+                // });
               }}
               onEndReachedThreshold={1}
             />
@@ -1043,7 +1042,19 @@ export default class CameraScreen extends React.Component {
               data={this.state.galleryMedias}
               renderItem={this.renderImages}
               onEndReached={() => {
-                this.getMorePictures();
+                
+                this.methodsMaster(50)
+                .then(res => {
+                  this.setState({
+                    galleryMedias: [
+                      ...this.state.galleryMedias,
+                      ...res
+                    ],
+                  });
+                })
+                .catch(error => {
+                  console.log('Error', error);
+                });
               }}
               onEndReachedThreshold={1}
             />
