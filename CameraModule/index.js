@@ -63,11 +63,10 @@ export default class CameraScreen extends React.Component {
   isZooming = false;
   cameraToggleRef = new Animated.Value(0);
   SelectorAnimatedRef = new Animated.Value(windowHeight);
-  methodsMaster = null
+  methodsMaster = null;
   constructor(props) {
     super(props);
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-    
   }
   // TO open device settings from custom modal or Parent Component
   handleParentSettingsButton() {
@@ -90,7 +89,7 @@ export default class CameraScreen extends React.Component {
     const {getDevicePhotos, getMorePhotos} = Modules();
     LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
     LogBox.ignoreAllLogs(); //Ignore all log notifications
-    this.methodsMaster = getMorePhotos; // Need to be improved 
+    this.methodsMaster = getMorePhotos; // Need to be improved
     getDevicePhotos(50)
       .then(res => {
         this.setState({galleryMedias: res});
@@ -132,7 +131,6 @@ export default class CameraScreen extends React.Component {
               //   this.failMsg({description:'You need to grant the permissions'})
               // this.props.navigation.goBack();
             } else {
-              
               getDevicePhotos(50)
                 .then(res => {
                   this.setState({galleryMedias: res});
@@ -140,7 +138,7 @@ export default class CameraScreen extends React.Component {
                 .catch(errror => {
                   console.log(errror);
                 });
-              
+
               this.camera.refreshAuthorizationStatus();
             }
           });
@@ -201,7 +199,7 @@ export default class CameraScreen extends React.Component {
   }
 
   // componentDidUpdate() {
-    
+
   //   console.log('first', this.state.galleryMedias);
   // }
 
@@ -635,139 +633,6 @@ export default class CameraScreen extends React.Component {
     </View>
   );
 
-  renderLandmarksOfFace(face) {
-    const renderLandmark = position =>
-      position && (
-        <View
-          style={[
-            styles.landmark,
-            {
-              left: position.x - landmarkSize / 2,
-              top: position.y - landmarkSize / 2,
-            },
-          ]}
-        />
-      );
-    return (
-      <View key={`landmarks-${face.faceID}`}>
-        {renderLandmark(face.leftEyePosition)}
-        {renderLandmark(face.rightEyePosition)}
-        {renderLandmark(face.leftEarPosition)}
-        {renderLandmark(face.rightEarPosition)}
-        {renderLandmark(face.leftCheekPosition)}
-        {renderLandmark(face.rightCheekPosition)}
-        {renderLandmark(face.leftMouthPosition)}
-        {renderLandmark(face.mouthPosition)}
-        {renderLandmark(face.rightMouthPosition)}
-        {renderLandmark(face.noseBasePosition)}
-        {renderLandmark(face.bottomMouthPosition)}
-      </View>
-    );
-  }
-
-  renderFaces = () => (
-    <View style={styles.facesContainer} pointerEvents="none">
-      {this.state.faces.map(this.renderFace)}
-    </View>
-  );
-
-  renderLandmarks = () => (
-    <View style={styles.facesContainer} pointerEvents="none">
-      {this.state.faces.map(this.renderLandmarksOfFace)}
-    </View>
-  );
-
-  renderTextBlocks = () => (
-    <View style={styles.facesContainer} pointerEvents="none">
-      {this.state.textBlocks.map(this.renderTextBlock)}
-    </View>
-  );
-
-  renderTextBlock = ({bounds, value}) => (
-    <React.Fragment key={value + bounds.origin.x}>
-      <Text
-        style={[
-          styles.textBlock,
-          {left: bounds.origin.x, top: bounds.origin.y},
-        ]}>
-        {value}
-      </Text>
-      <View
-        style={[
-          styles.text,
-          {
-            ...bounds.size,
-            left: bounds.origin.x,
-            top: bounds.origin.y,
-          },
-        ]}
-      />
-    </React.Fragment>
-  );
-
-  textRecognized = object => {
-    const {textBlocks} = object;
-    this.setState({textBlocks});
-  };
-
-  // barcodeRecognized = ({ barcodes }) => this.setState({ barcodes });
-
-  renderBarcodes = () => (
-    <View style={styles.facesContainer} pointerEvents="none">
-      {this.state.barcodes.map(this.renderBarcode)}
-    </View>
-  );
-
-  renderBarcode = ({bounds, data, type}) => (
-    <React.Fragment key={data + bounds.origin.x}>
-      <View
-        style={[
-          styles.text,
-          {
-            ...bounds.size,
-            left: bounds.origin.x,
-            top: bounds.origin.y,
-          },
-        ]}>
-        <Text style={[styles.textBlock]}>{`${data} ${type}`}</Text>
-      </View>
-    </React.Fragment>
-  );
-
-  renderRecording = () => {
-    const {isRecording} = this.state;
-    const backgroundColor = isRecording ? 'white' : 'darkred';
-    const action = isRecording ? this.stopVideo : this.takeVideo;
-    const button = isRecording ? this.renderStopRecBtn() : this.renderRecBtn();
-    return (
-      <TouchableOpacity
-        style={[
-          styles.flipButton,
-          {
-            flex: 0.3,
-            alignSelf: 'flex-end',
-            backgroundColor,
-          },
-        ]}
-        onPress={() => action()}>
-        {button}
-      </TouchableOpacity>
-    );
-  };
-
-  stopVideo = async () => {
-    await this.camera.stopRecording();
-    this.setState({isRecording: false});
-  };
-
-  renderRecBtn() {
-    return <Text style={styles.flipText}> REC </Text>;
-  }
-
-  renderStopRecBtn() {
-    return <Text style={styles.flipText}> ☕ </Text>;
-  }
-
   closeSelector() {
     Animated.timing(this.SelectorAnimatedRef, {
       toValue: windowHeight,
@@ -788,12 +653,6 @@ export default class CameraScreen extends React.Component {
       this.setState({
         isSelectorOpen: true,
       });
-    });
-  }
-
-  setImagesList(data) {
-    this.setState({
-      imagesArray: data,
     });
   }
 
@@ -972,14 +831,10 @@ export default class CameraScreen extends React.Component {
               key="{item}"
               renderItem={this.renderAlbum}
               onEndReached={() => {
-                
                 this.methodsMaster(50)
                   .then(res => {
                     this.setState({
-                      galleryMedias: [
-                        ...this.state.galleryMedias,
-                        ...res
-                      ],
+                      galleryMedias: [...this.state.galleryMedias, ...res],
                     });
                   })
                   .catch(error => {
@@ -1042,19 +897,15 @@ export default class CameraScreen extends React.Component {
               data={this.state.galleryMedias}
               renderItem={this.renderImages}
               onEndReached={() => {
-                
                 this.methodsMaster(50)
-                .then(res => {
-                  this.setState({
-                    galleryMedias: [
-                      ...this.state.galleryMedias,
-                      ...res
-                    ],
+                  .then(res => {
+                    this.setState({
+                      galleryMedias: [...this.state.galleryMedias, ...res],
+                    });
+                  })
+                  .catch(error => {
+                    console.log('Error', error);
                   });
-                })
-                .catch(error => {
-                  console.log('Error', error);
-                });
               }}
               onEndReachedThreshold={1}
             />
