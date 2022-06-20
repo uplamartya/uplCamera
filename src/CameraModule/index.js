@@ -22,7 +22,7 @@ import {
   requestMultiple,
   openSettings,
 } from 'react-native-permissions';
-import Modules from '../Modules';
+import Modules from '../../Modules/index';
 import {FlatGrid} from 'react-native-super-grid';
 import Header from '../Common/Components/Header';
 import {RNCamera} from 'react-native-camera';
