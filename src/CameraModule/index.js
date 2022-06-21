@@ -121,15 +121,13 @@ export default class CameraScreen extends React.Component {
                 'denied' ||
               statuses[PERMISSIONS.ANDROID.CAMERA] === 'denied'
             ) {
-              //   this.failMsg({description:'You need to grant the permissions'})
-              // this.props.navigation.goBack();
+              this.props?.onPermissionRejection();
             } else if (
               statuses[PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE] ===
                 'blocked' ||
               statuses[PERMISSIONS.ANDROID.CAMERA] === 'blocked'
             ) {
-              //   this.failMsg({description:'You need to grant the permissions'})
-              // this.props.navigation.goBack();
+              this.props?.onPermissionBlocked();
             } else {
               getDevicePhotos(50)
                 .then(res => {
@@ -795,7 +793,6 @@ export default class CameraScreen extends React.Component {
                     width: 20,
                     height: 20,
                     borderRadius: 10,
-                    // backgroundColor: 'red',
                     position: 'absolute',
                     bottom: 5,
                     right: 5,

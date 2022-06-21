@@ -13,10 +13,19 @@ const Header = props => {
         borderBottomColor: '#f1f1f1',
         borderBottomWidth: 2,
       }}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
         <TouchableOpacity
           onPress={props.onPressBack}
-          style={{justifyContent: 'center', alignItems: 'center', paddingHorizontal:10}}>
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 10,
+          }}>
           <Image
             source={require('../../assets/images/back_icon.png')}
             style={{height: 25, width: 25}}
@@ -26,7 +35,7 @@ const Header = props => {
       </View>
       <TouchableOpacity
         onPress={props.onPressDoneTxt}
-        style={{paddingHorizontal: 20, paddingVertical:20}}>
+        style={{paddingHorizontal: 20, paddingVertical: 20}}>
         {/* <Text style={{fontSize: 18, fontWeight:'bold'}}>{props.doneTxt}</Text> */}
       </TouchableOpacity>
     </View>
