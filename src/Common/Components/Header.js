@@ -22,12 +22,12 @@ const Header = props => {
             style={{height: 25, width: 25}}
           />
         </TouchableOpacity>
-        <Text style={{fontSize:22, fontWeight:'bold', paddingHorizontal:10}}>{props.headerText}</Text>
+        {/* <Text style={{fontSize:22, fontWeight:'bold', paddingHorizontal:10}}>{props.headerText}</Text> */}
       </View>
       <TouchableOpacity
         onPress={props.onPressDoneTxt}
         style={{paddingHorizontal: 20, paddingVertical:20}}>
-        <Text style={{fontSize: 18, fontWeight:'bold'}}>{props.doneTxt}</Text>
+        {/* <Text style={{fontSize: 18, fontWeight:'bold'}}>{props.doneTxt}</Text> */}
       </TouchableOpacity>
     </View>
   );

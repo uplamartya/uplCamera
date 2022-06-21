@@ -1005,7 +1005,7 @@ export default class CameraScreen extends React.Component {
       <>
         <View style={styles.container}>{this.renderCamera()}</View>
 
-        <Modal
+        {/* <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.showModal}
@@ -1068,7 +1068,7 @@ export default class CameraScreen extends React.Component {
               </View>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
       </>
     );
   }
