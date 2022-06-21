@@ -15,7 +15,7 @@
     "react-native": "0.68.2",
     "react-native-camera": "uplsoumen/react-native-camera-modified#master",
     "react-native-permissions": "^3.3.1",
-    "uplcamera": "/home/suman/uplsoumen/uplCamera-Converting-Library-into-NPM-package"
+    "uplcamera": "^0.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

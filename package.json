@@ -14,7 +14,7 @@
   },
   "peerDependencies": {
     "@react-native-community/cameraroll": "^4.1.2",
-    "react-native-camera": "^4.2.1",
+    "react-native-camera": "*/*",
     "react-native-permissions": "^3.3.1"
   },
   "devDependencies": {
