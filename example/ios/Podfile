@@ -24,7 +24,8 @@ target 'sampleApplication' do
   pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
 
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
-
+  pod 'Permission-Camera', :path => "../node_modules/react-native-permissions/ios/Camera"
+  pod 'Permission-PhotoLibrary', :path => "../node_modules/react-native-permissions/ios/PhotoLibrary"
   target 'sampleApplicationTests' do
     inherit! :complete
     # Pods for testing
