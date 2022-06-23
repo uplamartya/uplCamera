@@ -7,6 +7,13 @@ onPermissionRejection: Callback prop for user permission rejection
 onPermissionBlocked: Callback prop : when permissions are blocked by android system
 ```
 
+<p align="center">
+  <kbd>
+  <img src="https://github.com/uplamartya/uplCamera/blob/master/src/assets/images/preview.gif?raw=true"
+       title="Preview Demo"/>
+  </kbd>
+</p>
+
 Please install this libraries 
 
 react-native-camera: **uplsoumen/react-native-camera-modified#master**
